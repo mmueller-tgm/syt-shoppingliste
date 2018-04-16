@@ -7,16 +7,18 @@ let socket = require('socket.io-client')
 
 let client = new DiffSyncClient(socket('http://localhost:3001'), 'form-data')
 
-let data = {}
+let data = {liste: []}
 client.on('connected', function () {
     // Die Datenreferenz, welche zum synchronisieren verwendet wird.
-    data = client.getData()
+    let d1 = client.getData()
     console.log('Verbunden!')
     console.log('Daten akutell:')
-    if (data['liste'] == null) {
-        data['liste'] = []
+    if (d1['liste'] == null) {
+        d1['liste'] = data['liste']
+        data = d1
         client.sync()
     } else {
+        data = d1
         draw()
     }
 
@@ -32,20 +34,22 @@ client.on('synced', function () {
 })
 
 window.addEventListener('load', () => {
+    drawAll()
 })
 
-function draw () {
+function drawAll () {
     let b
     let row
-    document.getElementById('list').innerHTML = ''
-    // name Row
+
+    document.getElementById('input-field').innerHTML = ''
+
     row = document.createElement('tr')
 
     row.appendChild(document.createElement('td')).appendChild(document.createElement('b')).innerText = 'Name'
     row.appendChild(document.createElement('td')).appendChild(document.createElement('b')).innerText = 'Anzahl'
     row.appendChild(document.createElement('td')).appendChild(document.createElement('b')).innerText = 'Einheit'
     row.appendChild(document.createElement('td')).appendChild(document.createElement('b')).innerText = 'Erledigt'
-    document.getElementById('list').appendChild(row)
+    document.getElementById('input-field').appendChild(row)
 
     // input row
 
@@ -60,7 +64,22 @@ function draw () {
     b.setAttribute('id', 'submit')
     b.setAttribute('type', 'button')
     b.value = 'Einfügen'
-    document.getElementById('list').appendChild(row)
+    document.getElementById('input-field').appendChild(row)
+
+    document.getElementById('submit').addEventListener('click', function () {
+        data['liste'].push({name: document.getElementById('name_input').value, amt: document.getElementById('amt_input').value, unit: document.getElementById('unit_input').value, bought: document.getElementById('bought_input').checked})
+        client.sync()
+        drawAll()
+    })
+
+    draw()
+}
+
+function draw () {
+    let b
+    let row
+    document.getElementById('list').innerHTML = ''
+    // name Row
 
     // iterate over items
     for (let i in data['liste']) {
@@ -147,17 +166,13 @@ function draw () {
 
                     data['liste'][index][oldText.attributes['field'].value] = newInput.value
                     client.sync()
+                    draw()
                 })
             }
         })
 
         document.getElementById('list').appendChild(row)
     }
-    document.getElementById('submit').addEventListener('click', function () {
-        data['liste'].push({name: document.getElementById('name_input').value, amt: document.getElementById('amt_input').value, unit: document.getElementById('unit_input').value, bought: document.getElementById('bought_input').checked})
-        client.sync()
-        draw()
-    })
 }
 
 client.initialize()
