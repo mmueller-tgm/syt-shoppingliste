@@ -44,6 +44,7 @@ function draw () {
     row.appendChild(document.createElement('td')).appendChild(document.createElement('b')).innerText = 'Name'
     row.appendChild(document.createElement('td')).appendChild(document.createElement('b')).innerText = 'Anzahl'
     row.appendChild(document.createElement('td')).appendChild(document.createElement('b')).innerText = 'Einheit'
+    row.appendChild(document.createElement('td')).appendChild(document.createElement('b')).innerText = 'Erledigt'
     document.getElementById('list').appendChild(row)
 
     // input row
@@ -52,6 +53,9 @@ function draw () {
     row.appendChild(document.createElement('td')).appendChild(document.createElement('input')).setAttribute('id', 'name_input')
     row.appendChild(document.createElement('td')).appendChild(document.createElement('input')).setAttribute('id', 'amt_input')
     row.appendChild(document.createElement('td')).appendChild(document.createElement('input')).setAttribute('id', 'unit_input')
+    let cb = row.appendChild(document.createElement('td')).appendChild(document.createElement('input'))
+    cb.setAttribute('id', 'bought_input')
+    cb.setAttribute('type', 'checkbox')
     b = row.appendChild(document.createElement('td')).appendChild(document.createElement('input'))
     b.setAttribute('id', 'submit')
     b.setAttribute('type', 'button')
@@ -89,6 +93,19 @@ function draw () {
         b.setAttribute('field', 'unit')
         b.className += 'row_' + index
 
+        // unit text field
+        b = row.appendChild(document.createElement('td')).appendChild(document.createElement('input'))
+        b.setAttribute('id', index + '_bought')
+        b.setAttribute('index', index)
+        b.setAttribute('type', 'checkbox')
+        b.checked = data['liste'][index]['bought']
+        b.className += 'delete'
+        b.addEventListener('click', function () {
+            data['liste'][index]['bought'] = !data['liste'][index]['bought']
+            client.sync()
+            draw()
+        })
+
         // delete button
         b = row.appendChild(document.createElement('td')).appendChild(document.createElement('input'))
         b.setAttribute('id', index + '_delete')
@@ -111,10 +128,10 @@ function draw () {
         b.value = 'Bearbeiten'
 
         b.addEventListener('click', function () {
-            let b2 = b.cloneNode(true)
-            b.parentNode.replaceChild(b2, b)
-            b = b2
-            console.log(b.getAttribute('index'))
+            let b = this.cloneNode(true)
+            this.parentNode.replaceChild(b, this)
+
+            console.log(this)
 
             let v = document.getElementsByClassName('row_' + index)
             for (let oldText of v) {
@@ -137,7 +154,7 @@ function draw () {
         document.getElementById('list').appendChild(row)
     }
     document.getElementById('submit').addEventListener('click', function () {
-        data['liste'].push({name: document.getElementById('name_input').value, amt: document.getElementById('amt_input').value, unit: document.getElementById('unit_input').value})
+        data['liste'].push({name: document.getElementById('name_input').value, amt: document.getElementById('amt_input').value, unit: document.getElementById('unit_input').value, bought: document.getElementById('bought_input').checked})
         client.sync()
         draw()
     })
