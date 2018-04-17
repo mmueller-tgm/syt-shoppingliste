@@ -1,23 +1,13 @@
-# Differentialsynchronisation mit diffsync
+# Shopping Liste
+Die Shopping Liste Implementation ist abgeleitet von [diffsync-template](https://github.com/mmueller-tgm/diffsync-template), meiner Lösung zu [KevinW1998](https://github.com/KevinW1998)'s  [diffsync-template
+](https://github.com/KevinW1998/diffsync-template).
 
-Jeweils `client` und `server` sind mit node.js/npm konfiguriert. Vorraussetzung für diese Aufgabe ist Node.js 6 oder höher.
+## Client
+Unter __client/src__ ist die Source zu finden. Diese muss mithilfe von webpack noch für den Webbrowser konvertiert werden. Dies passiert wenn man im client Ordner `npm start` eingibt. Weiters muss ein HTTP Server gestartet werden mit `npm run server`.
 
-Um alle Abhängigkeiten zu installieren muss `npm install` auf dem jeweiligen Subprojekt ausgeführt werden.
+Wenn der Client sich mit einem anderen Server verbinden soll als _,,localhost:3001''_ kann dieser in Zeile 8 von __client/src/index.js__ verändert werden. Nach einer Veränderung muss wieder `npm start` ausgeführt werden.
 
-* `server` - Beinhaltet den diffsync-server. Kann mit `npm start` gestartet werden.
-* `client` - Beinhaltet den diffsync-client. Die HTML-Website ist in `dist/index.html` vorzufinden. Damit NPM-Packages mit dem Webbrowser funktionieren wurde `webpack` verwendet. Um index.html aufzurufen müssen die JavaScript-Dateien im `src`-Ordner vom webpack transpiliert werden. Dazu muss `npm start` ausgeführt werden. Danach kann man die Website `dist/index.html` aufrufen.
+## Server
+Damit die Shoppingliste mit anderen Clients synchronisiert wird, muss der diffsync Server noch gestartet werden. im server Ordner wird dazu `npm start` ausgeführt.
 
-## Testen
-* Sicherstellen das bei beiden Subprojekten `npm install` aufgerufen wurde
-* Konsole öffnen und im Ordner `server` `npm start` ausführen.
-* Eine weitere Konsole öffnen und im Ornder `client` `npm start` ausführen. Warten bis das Transpilieren fertig ist.
-* `dist/index.html` aufrufen und die Browser-Konsole öffnen. 
-* Konsole sollte nun `starting sync service` und `Verbunden!` anzeigen.
-
-## Aufgabe
-Baue auf `client` auf und implementiere die Synchronisation vom Formular. Bei Textveränderung bei einer der Textboxen soll die Synchronisation durchgeführt werden. Teste die Implementation in dem die Website zweimal geöffnet wird.
-
-### Weitere Resourcen
-
-* [diffsync](https://github.com/janmonschke/diffsync)
-* [EventTarget.addEventListener](https://developer.mozilla.org/de/docs/Web/API/EventTarget/addEventListener)
+Wenn der Port von dem diffsync Server verändert werden soll kann das in Zeile 25 (oder 21 wenn HTTPS verwendet wird) von __server/index.js__ angepasst werden.

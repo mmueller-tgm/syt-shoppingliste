@@ -43,6 +43,7 @@ function drawAll () {
 
     document.getElementById('input-field').innerHTML = ''
 
+    // Table Head
     row = document.createElement('tr')
 
     row.appendChild(document.createElement('td')).appendChild(document.createElement('b')).innerText = 'Name'
@@ -79,7 +80,6 @@ function draw () {
     let b
     let row
     document.getElementById('list').innerHTML = ''
-    // name Row
 
     // iterate over items
     for (let i in data['liste']) {
@@ -88,7 +88,6 @@ function draw () {
         let unit = data['liste'][i]['unit']
         let index = i
 
-        // test row
         row = document.createElement('tr')
 
         // name text field
