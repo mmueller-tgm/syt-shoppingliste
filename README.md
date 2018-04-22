@@ -11,6 +11,3 @@ Wenn der Client sich mit einem anderen Server verbinden soll als _,,localhost:30
 Damit die Shoppingliste mit anderen Clients synchronisiert wird, muss der diffsync Server noch gestartet werden. im server Ordner wird dazu `npm start` ausgeführt.
 
 Wenn der Port von dem diffsync Server verändert werden soll kann das in Zeile 25 (oder 21 wenn HTTPS verwendet wird) von __server/index.js__ angepasst werden.
-
-## Beispiel
-Ein Beispiel ist auf meiner Website gehostet unter __https://mmueller.xyz/syt__.
